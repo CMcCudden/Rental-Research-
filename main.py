@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 from selenium.webdriver.common.by import By
 from selenium import webdriver
+from selenium.common.exceptions import UnexpectedAlertPresentException
 import requests
 import time
 
@@ -48,7 +49,7 @@ for element in all_price_elements:
         continue
     finally:
         all_prices.append(price)
-
+    try:
         for n in range(len(all_links)):
             driver.get(FORM)
             time.sleep(2)
@@ -61,3 +62,8 @@ for element in all_price_elements:
             price.send_keys(all_prices[n])
             link.send_keys(all_links[n])
             submit.click()
+
+    except UnexpectedAlertPresentException:
+        continue
+    except IndexError:
+        continue
